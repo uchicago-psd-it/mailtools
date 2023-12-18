@@ -10,7 +10,7 @@ use Getopt::Std;
 use Time::Local;
 use Data::Dumper;
 
-my %opts = ( i => "/var/mail", d => "mail", m => 1, M => 0, U => 500 );
+my %opts = ( i => "/var/mail", m => 1, M => 0, U => 500 );
 
 getopts('hanmMvU:u:f:i:d:c', \%opts);
 
@@ -20,6 +20,8 @@ if ($opts{'h'}) {
 }
 if ($opts{'M'}) { $opts{'m'} = 0; }
 if ($opts{'u'}) { $opts{'n'} = 1; }
+
+$opts{'d'} = $opts{'m'} ? "mail" : "Maildir" unless $opts{'d'};
 
 my $doCounts = $opts{'n'} ? 1 : 0;
 my $doVerbose = $opts{'v'} ? 1 : 0;
@@ -35,7 +37,7 @@ if (($opts{'a'} and ($opts{'u'} or $opts{'f'})) or
 
 sub usage() {
   print "Usage: $0 [-v] { -u <username> | { -a [-U <uid>] | -f <filename> } [-c] } [-n] [ -m | -M ] [ -i <inbox path> ] [ -d <mail directory> ]\n";
-  print "-v:            Verbose mode. Print more details during processing.";
+  print "-v:            Verbose mode. Print more details during processing.\n";
   print "-a:            look up all users from passwd database\n";
   print "-U uid:        Minimum UID to use when scanning passwd database (default 500)\n";
   print "-u username:   look up user username\n";
@@ -48,7 +50,7 @@ sub usage() {
   print "-i path:       path to directory containing inbox file(s)\n";
   print "               defaults to '/var/mail'\n";
   print "-d path:       relative path within user's home directory to mail folders.\n";
-  print "               defaults to 'mail'\n";
+  print "               defaults to 'mail' (mbox) or 'Maildir' (maildir)\n";
 }
 
 sub get_filesize
