@@ -175,7 +175,7 @@ if ($opts{'u'}) {
         my $mailFolder = $File::Find::name =~ s/^$mailDir\///r;
         push @mailFolders, $mailFolder;
       },
-      follow => 1 
+      follow_skip => 2
     }, $mailDir);
 
   my %inbox = &readMbox($mailInbox);
@@ -299,7 +299,7 @@ if ($opts{'a'} or $opts{'f'}) {
           my $mailFolder = $File::Find::name =~ s/^$mailDir\///r;
           push @mailFolders, $mailFolder;
         },
-        follow => 1
+        follow_skip => 2
       }, $mailDir) unless !-e $mailDir;
 
     foreach my $mailFolder (@mailFolders) {
